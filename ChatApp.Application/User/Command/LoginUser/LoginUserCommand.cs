@@ -1,6 +1,5 @@
 ﻿using ChatApp.Application.Common.Interfaces;
 using ChatApp.Domain.Entities;
-using ChatApp.Domain.Events;
 using MediatR;
 
 namespace ChatApp.Application.User.Command.LoginUser
@@ -27,7 +26,7 @@ namespace ChatApp.Application.User.Command.LoginUser
         public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             string token = "";
-            
+
             var existingUser = _context.Users.FirstOrDefault(x => x.Username == request.Username);
             if (existingUser != null)
             {
@@ -45,7 +44,7 @@ namespace ChatApp.Application.User.Command.LoginUser
 
                     token = await _tokenService.GetToken(entity);
                 }
-           
+
             }
 
             return token;

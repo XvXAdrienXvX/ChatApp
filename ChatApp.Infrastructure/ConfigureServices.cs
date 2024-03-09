@@ -16,6 +16,12 @@ namespace ChatApp.Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     builder => builder.MigrationsAssembly(typeof(ChatDatabaseContext).Assembly.FullName)));
 
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                var dbContext = serviceProvider.GetRequiredService<ChatDatabaseContext>();
+                dbContext.Database.EnsureCreated();
+            }
+
             services.AddScoped<IChatDatabaseContext>(provider => provider.GetRequiredService<ChatDatabaseContext>());
             services.AddScoped<ITokenService, TokenService>();
 

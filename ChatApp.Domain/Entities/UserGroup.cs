@@ -9,5 +9,8 @@
         public int? GroupId { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+        public Users User { get; set; } 
+
+        public Groups Group { get; set; }
     }
 }

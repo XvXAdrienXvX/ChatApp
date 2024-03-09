@@ -7,5 +7,6 @@
         public int? GroupName { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+        public ICollection<UserGroup> UserGroups { get; set; }
     }
 }
