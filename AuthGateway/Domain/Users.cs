@@ -4,7 +4,7 @@ namespace AuthGateway.Domain
 {
     public sealed class Users : BaseEntity
     {
-        public Users(int Id, string username, string email, string passwordHash, string avatarUrl, DateTime createdDate): base(Id)
+        public Users(string username, string email, string passwordHash, string avatarUrl, DateTime createdDate): base(default(int))
         {
             Username = username;
             Email = email;
