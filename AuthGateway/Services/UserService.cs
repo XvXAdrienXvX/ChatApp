@@ -1,20 +1,31 @@
 ﻿using AuthGateway.Domain;
 using AuthGateway.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace AuthGateway.Services
 {
     public class UserService : IUserService
     {
-        private readonly IGenericRepository<Users> _userRepository;
+        private readonly IUserRepository _userRepository;
 
-
-        public UserService(IGenericRepository<Users> userRepository)
+        public UserService(
+            IUserRepository userRepository
+        )
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
+
         public async Task<Users> CreateAsync(Users user)
         {
-            return await _userRepository.AddAsync(user);
+            try
+            {    
+                return await  _userRepository.CreateUserWithRole(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)

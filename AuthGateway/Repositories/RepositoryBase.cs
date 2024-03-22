@@ -1,23 +1,24 @@
 ﻿using AuthGateway.Database;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace AuthGateway.Repositories
 {
-    public class Repository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
     {
-        private readonly AuthDatabaseContext _context;
         private readonly DbSet<TEntity> _dbSet;
+        protected AuthDatabaseContext authContext { get; set; }
 
-        public Repository(AuthDatabaseContext context)
+        public RepositoryBase(AuthDatabaseContext context)
         {
-            _context = context;
+            this.authContext = context;
             _dbSet = context.Set<TEntity>();
         }
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await authContext.SaveChangesAsync();
             return entity;
         }
 
@@ -26,13 +27,18 @@ namespace AuthGateway.Repositories
             var entity = await _dbSet.FindAsync(id);
             if (entity == null) return false;
             _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            await authContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<IEnumerable<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> FindAllByConditionAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public IQueryable<TEntity> FindByConditionAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.Where(predicate).AsNoTracking();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -47,8 +53,8 @@ namespace AuthGateway.Repositories
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            authContext.Entry(entity).State = EntityState.Modified;
+            await authContext.SaveChangesAsync();
             return entity;
         }
     }

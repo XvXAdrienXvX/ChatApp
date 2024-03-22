@@ -14,7 +14,7 @@ namespace AuthGateway.Database
         public DbSet<Users> Users => Set<Users>();
 
         public DbSet<Roles> Roles => Set<Roles>();
-
+        public DbSet<UserRole> UserRole => Set<UserRole>();
         public DbSet<Permission> Permission => Set<Permission>();
 
         public DbSet<RolePermission> RolePermission => Set<RolePermission>();

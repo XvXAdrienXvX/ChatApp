@@ -2,7 +2,7 @@
 using AuthGateway.Services;
 using MediatR;
 
-namespace AuthGateway.Commands
+namespace AuthGateway.Contracts.Commands
 {
     public record CreateUserCommand : IRequest<string>
     {

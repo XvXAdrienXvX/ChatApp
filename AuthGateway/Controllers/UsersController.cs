@@ -1,6 +1,5 @@
-﻿using AuthGateway.Commands;
+﻿using AuthGateway.Contracts.Commands;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthGateway.Controllers
