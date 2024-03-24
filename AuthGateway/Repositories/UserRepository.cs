@@ -1,9 +1,7 @@
 ﻿using AuthGateway.Database;
 using AuthGateway.Domain;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Transactions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace AuthGateway.Repositories
@@ -16,12 +14,12 @@ namespace AuthGateway.Repositories
         }
         public async Task<Users> CreateUserWithRole(Users entity)
         {
-             int userId = await ExecuteStoredProcedureAsync("createUserWithDefaultRole"
-                                ,new SqlParameter("username", entity.Username)
-                                ,new SqlParameter("email", entity.Email)
-                                ,new SqlParameter("password_hash", entity.PasswordHash)
-                                ,new SqlParameter("avatar_url", entity.AvatarUrl)     
-                                );
+            int userId = await ExecuteStoredProcedureAsync("createUserWithDefaultRole"
+                               , new SqlParameter("username", entity.Username)
+                               , new SqlParameter("email", entity.Email)
+                               , new SqlParameter("password_hash", entity.PasswordHash)
+                               , new SqlParameter("avatar_url", entity.AvatarUrl)
+                               );
 
             if (userId == 0)
             {
@@ -48,7 +46,6 @@ namespace AuthGateway.Repositories
                 // Execute the stored procedure
                 await authContext.Database.ExecuteSqlRawAsync(commandText, parameters);
 
-                // Get the output parameter value (generated ID)
                 int userId = (int)outputParameter.Value;
                 return userId;
             }
